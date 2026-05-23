@@ -9,17 +9,28 @@
 body{
   margin:0;
   font-family: Arial;
-  background:url('images/bg.jpg');
+  background:url('images/bg.jpg') no-repeat center center fixed;
   background-size:cover;
   color:white;
   text-align:center;
 }
 
+/* DARK OVERLAY */
+.overlay{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  z-index:-1;
+}
+
+/* CARD */
 .card{
   background:white;
   color:black;
   max-width:500px;
-  margin:100px auto;
+  margin:120px auto;
   padding:25px;
   border-radius:15px;
 }
@@ -44,6 +55,8 @@ button{
 </head>
 
 <body>
+
+<div class="overlay"></div>
 
 <div class="card">
 
