@@ -15,17 +15,16 @@ body{
   text-align:center;
 }
 
-/* DARK OVERLAY */
 .overlay{
   position:fixed;
   top:0;left:0;
   width:100%;
   height:100%;
-  background:rgba(0,0,0,0.5);
+  background:rgba(0,0,0,0.6);
   z-index:-1;
 }
 
-/* CARD */
+/* SEARCH BOX */
 .card{
   background:white;
   color:black;
@@ -51,6 +50,49 @@ button{
   cursor:pointer;
 }
 
+/* RESULT WINDOW */
+.resultBox{
+  display:none;
+  background:white;
+  color:black;
+  max-width:600px;
+  margin:30px auto;
+  padding:20px;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.preview{
+  width:100%;
+  height:300px;
+  border:1px solid #ddd;
+  margin-top:10px;
+}
+
+.btn{
+  display:inline-block;
+  margin:8px;
+  padding:10px 15px;
+  border-radius:8px;
+  text-decoration:none;
+  color:white;
+  cursor:pointer;
+}
+
+.view{background:#b8860b;}
+.download{background:#444;}
+.back{background:#999;}
+
+.qr img{
+  width:120px;
+  margin-top:10px;
+}
+
+.error{
+  color:red;
+  margin-top:15px;
+}
+
 </style>
 </head>
 
@@ -64,15 +106,88 @@ button{
 
 <input type="text" id="code" placeholder="Enter Certificate ID">
 <br>
-<button onclick="go()">Search</button>
+<button onclick="search()">Search</button>
+
+<p id="error" class="error"></p>
 
 </div>
 
+<!-- RESULT WINDOW -->
+<div class="resultBox" id="resultBox">
+
+<h3 id="certTitle"></h3>
+
+<!-- Preview -->
+<iframe id="preview" class="preview"></iframe>
+
+<!-- Buttons -->
+<div>
+  <a id="viewBtn" class="btn view" target="_blank">View Certificate</a>
+  <a id="downloadBtn" class="btn download">Download</a>
+  <a class="btn back" href="index.html">Back</a>
+</div>
+
+<!-- QR -->
+<div class="qr">
+  <h4>QR Code</h4>
+  <img id="qrImg">
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
 <script>
 
-function go(){
+let data = {};
+
+fetch("certificates.csv")
+.then(r=>r.text())
+.then(csv=>{
+  let parsed = Papa.parse(csv,{header:true});
+  parsed.data.forEach(row=>{
+    if(row.code){
+      data[row.code.toUpperCase()] = row;
+    }
+  });
+});
+
+function search(){
+
   let code = document.getElementById("code").value.toUpperCase();
-  window.location.href = "certificate.html?code=" + code;
+  let error = document.getElementById("error");
+  let box = document.getElementById("resultBox");
+
+  error.innerText = "";
+
+  if(!data[code]){
+    error.innerText = "No certificate found with this code.";
+    box.style.display = "none";
+    return;
+  }
+
+  let cert = data[code];
+
+  // show box
+  box.style.display = "block";
+
+  // title
+  document.getElementById("certTitle").innerText = cert.name;
+
+  // preview (PDF embedded)
+  document.getElementById("preview").src = cert.file;
+
+  // buttons (NO ACTION unless clicked)
+  document.getElementById("viewBtn").href = cert.file;
+  document.getElementById("downloadBtn").href = cert.file;
+  document.getElementById("downloadBtn").setAttribute("download","");
+
+  // QR
+  let url = window.location.origin + "/certificate.html?code=" + code;
+
+  document.getElementById("qrImg").src =
+    "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=" + encodeURIComponent(url);
+
 }
 
 </script>
