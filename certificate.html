@@ -8,7 +8,7 @@
 
 body{
   margin:0;
-  font-family: Arial;
+  font-family:Arial;
   background:#0f172a;
   color:white;
   text-align:center;
@@ -24,11 +24,12 @@ body{
   border-radius:15px;
 }
 
-/* PDF */
-iframe{
+/* PREVIEW */
+.preview{
   width:100%;
-  height:500px;
+  height:350px;
   border:none;
+  margin-top:15px;
 }
 
 /* BUTTONS */
@@ -41,13 +42,22 @@ iframe{
   color:white;
 }
 
-.view{background:#b8860b;}
-.download{background:#444;}
-.back{background:#999;}
+.view{
+  background:#b8860b;
+}
 
+.download{
+  background:#444;
+}
+
+.back{
+  background:#777;
+}
+
+/* QR */
 .qr img{
   width:140px;
-  margin-top:10px;
+  margin-top:15px;
 }
 
 </style>
@@ -59,17 +69,39 @@ iframe{
 
 <h2 id="title">Loading...</h2>
 
-<iframe id="pdf"></iframe>
+<!-- معاينة بسيطة -->
+<iframe id="preview" class="preview"></iframe>
 
+<!-- الأزرار -->
 <div>
-  <a id="viewBtn" class="btn view" target="_blank">View</a>
-  <a id="downloadBtn" class="btn download">Download</a>
-  <a class="btn back" href="search.html">Back</a>
+
+<a id="viewBtn"
+class="btn view"
+target="_blank">
+View Certificate
+</a>
+
+<a id="downloadBtn"
+class="btn download"
+download>
+Download PDF
+</a>
+
+<a href="search.html"
+class="btn back">
+Back
+</a>
+
 </div>
 
+<!-- QR -->
+
 <div class="qr">
-  <h4>QR Code</h4>
-  <img id="qrImg">
+
+<h4>QR Code</h4>
+
+<img id="qrImg">
+
 </div>
 
 </div>
@@ -78,37 +110,57 @@ iframe{
 
 <script>
 
-const code = new URLSearchParams(window.location.search).get("code")?.toUpperCase();
+const code = new URLSearchParams(window.location.search)
+.get("code")?.toUpperCase();
 
 let data = {};
 
 fetch("certificates.csv")
 .then(r=>r.text())
 .then(csv=>{
+
   let parsed = Papa.parse(csv,{header:true});
+
   parsed.data.forEach(row=>{
+
     if(row.code){
       data[row.code.toUpperCase()] = row;
     }
+
   });
 
   let cert = data[code];
 
   if(cert){
 
-    document.getElementById("title").innerText = cert.name;
-    document.getElementById("pdf").src = cert.file;
+    // الاسم
+    document.getElementById("title")
+    .innerText = cert.name;
 
-    document.getElementById("viewBtn").href = cert.file;
-    document.getElementById("downloadBtn").href = cert.file;
+    // المعاينة
+    document.getElementById("preview")
+    .src = cert.file;
 
+    // زر العرض
+    document.getElementById("viewBtn")
+    .href = cert.file;
+
+    // زر التحميل
+    document.getElementById("downloadBtn")
+    .href = cert.file;
+
+    // QR
     let url = window.location.href;
 
     document.getElementById("qrImg").src =
-      "https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=" + encodeURIComponent(url);
+    "https://api.qrserver.com/v1/create-qr-code/?size=140x140&data="
+    + encodeURIComponent(url);
 
   } else {
-    document.body.innerHTML = "<h2>Certificate Not Found</h2>";
+
+    document.body.innerHTML =
+    "<h2>Certificate Not Found</h2>";
+
   }
 
 });
