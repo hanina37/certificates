@@ -13,19 +13,13 @@ body{
   font-family: Arial;
   background:#0f172a;
   color:white;
+  text-align:center;
 }
 
-/* HERO */
 .hero{
   width:100%;
   height:450px;
   object-fit:cover;
-}
-
-/* HEADER */
-.header{
-  text-align:center;
-  padding:20px;
 }
 
 .title{
@@ -34,71 +28,26 @@ body{
   background:linear-gradient(90deg,gold,#fff,gold);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
+  margin-top:20px;
 }
 
 .welcome{
-  text-align:center;
   margin-top:10px;
-  font-size:18px;
   opacity:0.9;
 }
 
-/* NAV BUTTONS */
-.nav{
-  text-align:center;
-  margin:20px;
+.buttons{
+  margin-top:30px;
 }
 
-.nav a{
+.btn{
   display:inline-block;
   margin:10px;
-  padding:10px 15px;
+  padding:12px 18px;
   background:#b8860b;
   color:white;
   text-decoration:none;
   border-radius:8px;
-}
-
-/* SEARCH SECTION */
-.search-section{
-  background:url('images/bg.jpg');
-  background-size:cover;
-  padding:60px 20px;
-  text-align:center;
-}
-
-.card{
-  background:white;
-  color:black;
-  max-width:500px;
-  margin:auto;
-  padding:25px;
-  border-radius:15px;
-}
-
-input{
-  width:90%;
-  padding:12px;
-  text-align:center;
-}
-
-button{
-  margin-top:10px;
-  padding:12px 18px;
-  background:#b8860b;
-  color:white;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.result{
-  margin-top:15px;
-}
-
-.qr{
-  width:120px;
-  margin-top:10px;
 }
 
 </style>
@@ -106,89 +55,17 @@ button{
 
 <body>
 
-<!-- HERO -->
 <img src="images/hero.jpg" class="hero">
 
-<div class="header">
-  <div class="title">International Academy for Protocol Leadership</div>
-  <div class="welcome">Welcome to the official verification portal</div>
-</div>
+<div class="title">International Academy for Protocol Leadership</div>
+<div class="welcome">Welcome to the official verification system</div>
 
-<!-- NAV -->
-<div class="nav">
-  <a href="about.html">About</a>
-  <a href="#search">Search Certificates</a>
-</div>
+<div class="buttons">
 
-<!-- SEARCH SECTION -->
-<div id="search" class="search-section">
-
-<div class="card">
-
-<h3>Certificate Verification</h3>
-
-<input type="text" id="code" placeholder="Enter Certificate ID">
-<br>
-<button onclick="search()">Verify</button>
-
-<div class="result" id="result"></div>
+<a class="btn" href="search.html">Search Certificates</a>
+<a class="btn" href="about.html">About Academy</a>
 
 </div>
-
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-
-<script>
-
-let data = {};
-
-fetch("certificates.csv")
-.then(r=>r.text())
-.then(csv=>{
-  let parsed = Papa.parse(csv,{header:true});
-  parsed.data.forEach(row=>{
-    if(row.code){
-      data[row.code.toUpperCase()] = row;
-    }
-  });
-});
-
-function search(){
-
-  let code = document.getElementById("code").value.toUpperCase();
-  let r = document.getElementById("result");
-
-  if(data[code]){
-
-    let qr = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${window.location.origin}/certificate.html?code=${code}`;
-
-    r.innerHTML = `
-      <h3>${data[code].name}</h3>
-
-      <a href="certificate.html?code=${code}" target="_blank"
-         style="display:inline-block;margin-top:10px;padding:10px;background:#b8860b;color:white;text-decoration:none;border-radius:8px;">
-         View Certificate
-      </a>
-
-      <br>
-
-      <a href="${data[code].file}" download
-         style="display:inline-block;margin-top:10px;padding:10px;background:#444;color:white;text-decoration:none;border-radius:8px;">
-         Download PDF
-      </a>
-
-      <br>
-
-      <img class="qr" src="${qr}">
-    `;
-
-  } else {
-    r.innerHTML = "<p style='color:red'>Not Found</p>";
-  }
-}
-
-</script>
 
 </body>
 </html>
