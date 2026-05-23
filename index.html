@@ -15,10 +15,17 @@ body{
   color:white;
 }
 
+/* HERO */
+.hero{
+  width:100%;
+  height:450px;
+  object-fit:cover;
+}
+
 /* HEADER */
 .header{
   text-align:center;
-  padding:30px;
+  padding:20px;
 }
 
 .title{
@@ -29,34 +36,44 @@ body{
   -webkit-text-fill-color:transparent;
 }
 
-/* HERO IMAGE */
-.hero{
-  width:100%;
-  height:420px;
-  object-fit:cover;
+.welcome{
+  text-align:center;
+  margin-top:10px;
+  font-size:18px;
+  opacity:0.9;
 }
 
-/* NAV */
+/* NAV BUTTONS */
 .nav{
   text-align:center;
-  margin:15px;
+  margin:20px;
 }
 
 .nav a{
-  color:gold;
+  display:inline-block;
   margin:10px;
+  padding:10px 15px;
+  background:#b8860b;
+  color:white;
   text-decoration:none;
+  border-radius:8px;
 }
 
-/* SEARCH BOX */
+/* SEARCH SECTION */
+.search-section{
+  background:url('images/bg.jpg');
+  background-size:cover;
+  padding:60px 20px;
+  text-align:center;
+}
+
 .card{
   background:white;
   color:black;
   max-width:500px;
-  margin:-60px auto 40px;
+  margin:auto;
   padding:25px;
   border-radius:15px;
-  text-align:center;
 }
 
 input{
@@ -76,7 +93,7 @@ button{
 }
 
 .result{
-  margin-top:20px;
+  margin-top:15px;
 }
 
 .qr{
@@ -89,20 +106,23 @@ button{
 
 <body>
 
+<!-- HERO -->
+<img src="images/hero.jpg" class="hero">
+
 <div class="header">
   <div class="title">International Academy for Protocol Leadership</div>
+  <div class="welcome">Welcome to the official verification portal</div>
 </div>
-
-<!-- 🖼️ HERO IMAGE -->
-<img src="images/hero.jpg" class="hero">
 
 <!-- NAV -->
 <div class="nav">
-  <a href="index.html">Home</a>
   <a href="about.html">About</a>
+  <a href="#search">Search Certificates</a>
 </div>
 
-<!-- SEARCH -->
+<!-- SEARCH SECTION -->
+<div id="search" class="search-section">
+
 <div class="card">
 
 <h3>Certificate Verification</h3>
@@ -112,6 +132,8 @@ button{
 <button onclick="search()">Verify</button>
 
 <div class="result" id="result"></div>
+
+</div>
 
 </div>
 
@@ -143,8 +165,21 @@ function search(){
 
     r.innerHTML = `
       <h3>${data[code].name}</h3>
-      <a href="certificate.html?code=${code}" target="_blank">View Certificate</a>
+
+      <a href="certificate.html?code=${code}" target="_blank"
+         style="display:inline-block;margin-top:10px;padding:10px;background:#b8860b;color:white;text-decoration:none;border-radius:8px;">
+         View Certificate
+      </a>
+
       <br>
+
+      <a href="${data[code].file}" download
+         style="display:inline-block;margin-top:10px;padding:10px;background:#444;color:white;text-decoration:none;border-radius:8px;">
+         Download PDF
+      </a>
+
+      <br>
+
       <img class="qr" src="${qr}">
     `;
 
