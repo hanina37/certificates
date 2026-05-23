@@ -13,13 +13,20 @@ body{
   font-family: Arial;
   background:#0f172a;
   color:white;
-  text-align:center;
 }
 
+/* HERO IMAGE (FIXED) */
 .hero{
   width:100%;
-  height:450px;
-  object-fit:cover;
+  max-height:70vh;
+  height:auto;
+  display:block;
+}
+
+/* TITLE */
+.header{
+  text-align:center;
+  padding:20px;
 }
 
 .title{
@@ -28,22 +35,24 @@ body{
   background:linear-gradient(90deg,gold,#fff,gold);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-top:20px;
 }
 
 .welcome{
+  text-align:center;
   margin-top:10px;
   opacity:0.9;
 }
 
-.buttons{
-  margin-top:30px;
+/* NAV */
+.nav{
+  text-align:center;
+  margin:20px;
 }
 
-.btn{
+.nav a{
   display:inline-block;
   margin:10px;
-  padding:12px 18px;
+  padding:10px 15px;
   background:#b8860b;
   color:white;
   text-decoration:none;
@@ -55,16 +64,17 @@ body{
 
 <body>
 
+<!-- HERO -->
 <img src="images/hero.jpg" class="hero">
 
-<div class="title">International Academy for Protocol Leadership</div>
-<div class="welcome">Welcome to the official verification system</div>
+<div class="header">
+  <div class="title">International Academy for Protocol Leadership</div>
+  <div class="welcome">Welcome to the official verification system</div>
+</div>
 
-<div class="buttons">
-
-<a class="btn" href="search.html">Search Certificates</a>
-<a class="btn" href="about.html">About Academy</a>
-
+<div class="nav">
+  <a href="search.html">Search Certificates</a>
+  <a href="about.html">About Academy</a>
 </div>
 
 </body>
