@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Certificate Verification</title>
+<title>Certificate</title>
 
 <style>
 
@@ -15,7 +15,6 @@ body{
   padding:30px;
 }
 
-/* BOX */
 .box{
   max-width:900px;
   margin:auto;
@@ -23,10 +22,8 @@ body{
   color:black;
   padding:25px;
   border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* PDF VIEW */
 iframe{
   width:100%;
   height:500px;
@@ -34,42 +31,25 @@ iframe{
   margin-top:15px;
 }
 
-/* BUTTONS */
-.buttons{
-  margin-top:15px;
-}
-
 .btn{
   display:inline-block;
-  margin:8px;
+  margin:10px;
   padding:12px 18px;
   border-radius:8px;
   text-decoration:none;
   color:white;
-  font-weight:bold;
 }
 
-.view{
-  background:#b8860b;
-}
+.view{background:#b8860b;}
+.download{background:#444;}
 
-.download{
-  background:#444;
-}
+.qr img{width:140px;margin-top:15px;}
 
-/* QR */
-.qr{
+a.home{
+  display:inline-block;
   margin-top:20px;
-}
-
-.qr img{
-  width:140px;
-}
-
-/* ERROR */
-.error{
-  color:red;
-  font-size:18px;
+  color:#b8860b;
+  text-decoration:none;
 }
 
 </style>
@@ -79,22 +59,21 @@ iframe{
 
 <div class="box">
 
-<h2 id="title">Loading Certificate...</h2>
+<h2 id="title">Loading...</h2>
 
-<!-- PDF -->
 <iframe id="pdf"></iframe>
 
-<!-- BUTTONS -->
-<div class="buttons">
-  <a id="viewBtn" class="btn view" target="_blank">View Certificate</a>
-  <a id="downloadBtn" class="btn download" target="_blank">Download PDF</a>
+<div>
+  <a id="viewBtn" class="btn view" target="_blank">View</a>
+  <a id="downloadBtn" class="btn download" target="_blank">Download</a>
 </div>
 
-<!-- QR -->
 <div class="qr">
-  <h4>Certificate QR</h4>
+  <h4>QR Code</h4>
   <img id="qrImg">
 </div>
+
+<a class="home" href="index.html">Back to Home</a>
 
 </div>
 
@@ -102,17 +81,14 @@ iframe{
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
-const code = params.get("code")?.toUpperCase();
+const code = new URLSearchParams(window.location.search).get("code")?.toUpperCase();
 
 let data = {};
 
 fetch("certificates.csv")
-.then(r => r.text())
-.then(csv => {
-
-  let parsed = Papa.parse(csv, { header:true });
-
+.then(r=>r.text())
+.then(csv=>{
+  let parsed = Papa.parse(csv,{header:true});
   parsed.data.forEach(row=>{
     if(row.code){
       data[row.code.toUpperCase()] = row;
@@ -123,24 +99,19 @@ fetch("certificates.csv")
 
   if(cert){
 
-    // TITLE
     document.getElementById("title").innerText = cert.name;
-
-    // PDF VIEW INSIDE PAGE
     document.getElementById("pdf").src = cert.file;
 
-    // BUTTONS
     document.getElementById("viewBtn").href = cert.file;
     document.getElementById("downloadBtn").href = cert.file;
 
-    // QR LINK (this page itself)
     let url = window.location.href;
 
     document.getElementById("qrImg").src =
       "https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=" + encodeURIComponent(url);
 
   } else {
-    document.body.innerHTML = "<h2 class='error'>Certificate Not Found</h2>";
+    document.body.innerHTML = "<h2>Certificate Not Found</h2>";
   }
 
 });
