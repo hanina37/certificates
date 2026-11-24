@@ -24,6 +24,18 @@ body{
   border-radius:15px;
 }
 
+#title{
+  margin-bottom:6px;
+}
+
+.specialty{
+  margin-top:0;
+  margin-bottom:15px;
+  font-size:17px;
+  color:#b8860b;
+  font-weight:bold;
+}
+
 /* PREVIEW */
 .preview{
   width:100%;
@@ -68,6 +80,7 @@ body{
 <div class="box">
 
 <h2 id="title">Loading...</h2>
+<p id="specialty" class="specialty"></p>
 
 <!-- معاينة بسيطة -->
 <iframe id="preview" class="preview"></iframe>
@@ -124,7 +137,7 @@ fetch("certificates.csv")
   parsed.data.forEach(row=>{
 
     if(row.code){
-      data[row.code.toUpperCase()] = row;
+      data[row.code.trim().toUpperCase()] = row;
     }
 
   });
@@ -136,6 +149,10 @@ fetch("certificates.csv")
     // الاسم
     document.getElementById("title")
     .innerText = cert.name;
+
+    // الاختصاص أسفل الاسم
+    document.getElementById("specialty")
+    .innerText = cert.specialty || "";
 
     // المعاينة
     document.getElementById("preview")
